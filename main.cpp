@@ -364,6 +364,6 @@ int main(){
             default: cout<<"Not a Valid choice!"<<endl;
                     break;
         }
-    }while(choice!=0);
+    }while(choice!=5);
     return 0;
 }
