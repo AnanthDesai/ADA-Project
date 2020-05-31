@@ -3,13 +3,16 @@
 #include<stdlib.h>
 #include<string>
 #include<iomanip>
+#include<time.h>
+#include<ctime>
+
 
 #define MAX 9999
 
  using namespace std;
 
  int **graph;
- int police_count = 0, med_count = 0, fire_count = 0, org_count = 0, home_count = 0;
+ int police_count = 0, med_count = 0, fire_count = 0, org_count = 0, home_count = 0;        //COUNT
 
  typedef class Node{            // Main class of the node : Represents the type of location
 
@@ -131,8 +134,8 @@ Node* last = NULL;
         temp=temp->next;
     }
     cout<<"Number of Police Stations\t:\t"<<police_count<<endl;
-    cout<<"Number of Hospitals\t:\t"<<med_count<<endl;
-    cout<<"Number of Fire Stations\t:\t"<<fire_count<<endl;
+    cout<<"Number of Hospitals\t\t:\t"<<med_count<<endl;
+    cout<<"Number of Fire Stations\t\t:\t"<<fire_count<<endl;
     cout<<"Number of Houses\t\t:\t"<<home_count<<endl;
     cout<<endl;
     return 0;
@@ -164,6 +167,8 @@ int input_graph(){                      //Input initial graph
     return 0;
 }
 
+
+//INCREASE THE SIZE OF THE GRAPH
 int increase_graph(){                   //UPDATE THE GRAPH WITH INCREASED SIZE
     int temp_graph[last->number][last->number];
     for(int i=0;i<last->number;i++)
@@ -207,7 +212,9 @@ again1:
     return 0;
 }
 
-void put_path(int path[], int dest_node){           /*  DISPLAY THE SHORTEST PATH       */
+
+//DISPLAY THE SHORTEST PATH
+void put_path(int path[], int dest_node){
     if(path[dest_node]==-1)
         return;
 
@@ -230,7 +237,7 @@ int chooseService(int distance[], int path[] , char node_type, int node_req){
     Node* temp = start;
     int dist[last->number],min_node,k=0, min_dist = MAX;
     for(int i=0;i<last->number, temp!=NULL; i++){
-        if(((int)temp->type==(int)node_type) || ((int)temp->type==(int)node_type+32)){
+        if(((int)temp->type==(int)node_type) || ((int)temp->type==(int)node_type+32)){      // CHOOSE THE APPROPRIATE SERVICE FROM ALL THE SHORTEST
             dist[k] = distance[i];
             if(dist[k]<min_dist){
                 min_dist = dist[k];
@@ -251,6 +258,8 @@ int Dijkstra(int node_req, char node_type){
     int distance[last->number];     //ARRAY WHICH HOLDS THE DISTANCE TO ALL THE NODES OF THE SAME TYPE
     int visited_array[last->number];        // ARRAY WHICH HOLD THE VISITED NODES
     int path[last->number];     //HOLDS THE PATH TO THE SHORTEST ROUTE
+
+    float start_time = clock();
 
 
     for(int i=0;i<last->number;i++){        //INITIALIZE THE ARRAY VALUES: DIST TO INFINITY AND VISITED ALL TO ZERO
@@ -273,9 +282,14 @@ int Dijkstra(int node_req, char node_type){
             }
     }
 
+    float end_time = clock();
+    float time_taken = (start_time + end_time)/CLOCKS_PER_SEC;
+
     cout<<endl<<endl;
     distance[0] = chooseService(distance, path, node_type, node_req);
-    cout<<endl<<" and it is "<<distance[0]<<" units away from your location."<<endl<<endl;
+    cout<<endl<<" and it is "<<distance[0]<<" units away from your location."<<endl;
+
+    cout<<"Start time: "<<start_time<<endl<<"End time: "<<end_time<<endl<<"Time taken to produce result: "<<time_taken<<endl<<endl;
     return 0;
 }
 
@@ -391,14 +405,15 @@ int remove_graph(){
 
 int choice_entry(){
     int n;
+
     cout<<endl<<endl;
     cout<<"1. Codes:"<<endl<<"\t Police emergency: \t  100"<<endl<<"\t Medical emergency: \t 108"<<endl<<"\t Fire emergency: \t 104"<<endl<<"\t Organ Transplant: \t 110"<<endl;
-    cout<<"Enter your choice/code: "<<endl;
     cout<<"2. Show the present graph."<<endl;
     cout<<"3. Add an element to the present graph"<<endl;
     cout<<"4. Delete a node from the graph."<<endl;
     cout<<"5. Show Graph info."<<endl;
     cout<<"6. Quit"<<endl<<endl;
+    cout<<"Enter your choice/code: ";
           cin>>n;
     return n;
 }
@@ -429,6 +444,8 @@ int main(){
             case 4: remove_graph();
                     break;
             case 5: show_info();
+                    break;
+            case 6: exit(0);
                     break;
             case 100:  if(police_count>0)
                             Emergency('P');
